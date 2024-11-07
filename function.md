@@ -357,6 +357,7 @@ plot_State <- function(x) {
     grid.arrange(p1, p2, p3, ncol = 3)
   }
 ```
+http://localhost:8787/files/YauYauFilter/state_plot.png![image](https://github.com/user-attachments/assets/6a2f52ea-5b51-49a4-93e5-bf92902b27c4)
 
 ```R
 # 观测过程的图像
@@ -393,6 +394,7 @@ plot_Obser <- function(y_tau) {
     grid.arrange(p4, p5, p6, ncol = 3)
   }
 ```
+[http://localhost:8787/files/YauYauFilter/observation_plot.png](http://localhost:8787/files/YauYauFilter/observation_plot.png)![image](https://github.com/user-attachments/assets/c897479a-71d6-4cd6-8667-fdd5028a2a9d)
 
 ### PDE 离散
 
