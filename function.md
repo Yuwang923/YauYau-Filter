@@ -287,8 +287,56 @@ plot_Obser(){
 
 ### PDE 离散
 
+```C++
+\\ 
+
+\\ [[Rcpp::export]]
+??(){
+\\
+
+}
+```
+
 ### PDE 求解
+
+```C++
+\\ 
+
+\\ [[Rcpp::export]]
+KolmogorovPDE_Solve(){
+\\
+
+}
+```
 
 ### 状态估计
 
+```C++
+\\ 
+
+\\ [[Rcpp::export]]
+Estimation_State(){
+\\
+for (){
+    \\
+    \\
+    for (){
+        \\
+        \\
+    }
+}
+
+}
+```
+
 ### 结果对比
+
+```C++
+\\ 结果对比
+
+\\ [[Rcpp::export]]
+Result_Compare(){
+\\
+
+}
+```
