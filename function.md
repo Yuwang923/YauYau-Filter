@@ -253,15 +253,72 @@ lines(t(Zhat2[1:2, ]), col = "blue", lwd = 2)
 
 ## YauYau Filter
 
+### 参数设置
+
+```R
+Dim <- 3
+T <- 20
+Dt <- 0.001
+Dtau <- 5 * Dt
+Nt <- as.integer(Dtau / Dt)
+Ntau <- as.integer(T / Dtau)
+NtNtau <- as.integer(T / Dt)
+
+# Define functions f and h
+f <- function(x) {
+  return(c(cos(x[1]), cos(x[2]), cos(x[3]))) # R index starts from 1
+}
+
+h <- function(x) {
+  return(c(x[1]^3, x[2]^3, x[3]^3)) # R index starts from 1
+}
+```
+
 ### 状态-观测模拟
 
 ```c++
-\\ 信号-观测模型的模拟
+#include <RcppArmadillo.h>
+using namespace Rcpp;
+using namespace arma;
 
-\\ [[Rcpp::export]]
-Simulate_State_Obser(){
-\\
-
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export]]
+List Simulate_State_Obser(double Dt, int Ntau, int NtNtau, Function f, Function h, int Dim) {
+  mat x(NtNtau, Dim, fill::zeros);
+  mat y_Dt(NtNtau, Dim, fill::zeros);
+  mat y_tau(Ntau, Dim, fill::zeros);
+  double sqrtdT = sqrt(Dt);
+  
+  // Set seed for reproducibility
+  Environment base_env("package:base");
+  Function set_seed = base_env["set.seed"];
+  set_seed(1234);
+  
+  // Simulate x
+  for (int t = 1; t < NtNtau; ++t) {
+    rowvec x_prev = x.row(t - 1);
+    NumericVector f_value = as<NumericVector>(f(x_prev));
+    rowvec noise = randn<rowvec>(Dim);
+    x.row(t) = x_prev + as<rowvec>(f_value) * Dt + sqrtdT * noise;
+  }
+  
+  // Simulate y_Dt
+  for (int t = 1; t < NtNtau; ++t) {
+    rowvec x_prev = x.row(t);
+    NumericVector h_value = as<NumericVector>(h(x_prev));
+    rowvec noise = randn<rowvec>(Dim);
+    y_Dt.row(t) = y_Dt.row(t - 1) + as<rowvec>(h_value) * Dt + sqrtdT * noise;
+  }
+  
+  // Simulate y_tau
+  for (int n = 1; n < Ntau; ++n) {
+    int t = n * (NtNtau / Ntau);
+    y_tau.row(n) = y_Dt.row(t);
+  }
+  
+  return List::create(Named("x") = x,
+                      Named("y_Dt") = y_Dt,
+                      Named("y_tau") = y_tau);
 }
 ```
 
