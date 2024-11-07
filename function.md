@@ -322,24 +322,76 @@ List Simulate_State_Obser(double Dt, int Ntau, int NtNtau, Function f, Function 
 }
 ```
 
-```c++
-\\ 状态过程的模拟可视化
-
-\\ [[Rcpp::export]]
-plot_State(){
-\\
-
-}
+```R
+# 状态过程的图像
+plot_State <- function(x) {
+    # Convert matrices to data frames for easier plotting
+    x_df <- as.data.frame(x)
+    
+    # Add time column
+    x_df$time <- 1:nrow(x_df)
+    
+    # Reshape data frames for plotting
+    x_melt <- reshape2::melt(x_df, id.vars = "time", variable.name = "Dimension", value.name = "Value")
+    
+    # Plot x for each dimension
+    p1 <- ggplot(subset(x_melt, Dimension == "V1"), aes(x = time, y = Value)) +
+      geom_line(color = "blue") +
+      labs(title = "x_1", x = "Time", y = "Value") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5))
+    
+    p2 <- ggplot(subset(x_melt, Dimension == "V2"), aes(x = time, y = Value)) +
+      geom_line(color = "red") +
+      labs(title = "x_2", x = "Time", y = "Value") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5))
+    
+    p3 <- ggplot(subset(x_melt, Dimension == "V3"), aes(x = time, y = Value)) +
+      geom_line(color = "green") +
+      labs(title = "x_3", x = "Time", y = "Value") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5))
+    
+    # Arrange the plots
+    grid.arrange(p1, p2, p3, ncol = 3)
+  }
 ```
 
-```c++
-\\ 观测过程的模拟可视化
-
-\\ [[Rcpp::export]]
-plot_Obser(){
-\\
-
-}
+```R
+# 观测过程的图像
+plot_Obser <- function(y_tau) {
+    # Convert matrices to data frames for easier plotting
+    y_tau_df <- as.data.frame(y_tau)
+    
+    # Add time column
+    y_tau_df$time <- seq(1, nrow(y_tau_df))
+    
+    # Reshape data frames for plotting
+    y_tau_melt <- reshape2::melt(y_tau_df, id.vars = "time", variable.name = "Dimension", value.name = "Value")
+    
+    # Plot y_tau for each dimension
+    p4 <- ggplot(subset(y_tau_melt, Dimension == "V1"), aes(x = time, y = Value)) +
+      geom_line(color = "blue") +
+      labs(title = "y_1", x = "Time", y = "Value") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5))
+    
+    p5 <- ggplot(subset(y_tau_melt, Dimension == "V2"), aes(x = time, y = Value)) +
+      geom_line(color = "red") +
+      labs(title = "y_2", x = "Time", y = "Value") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5))
+    
+    p6 <- ggplot(subset(y_tau_melt, Dimension == "V3"), aes(x = time, y = Value)) +
+      geom_line(color = "green") +
+      labs(title = "y_3", x = "Time", y = "Value") +
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5))
+    
+    # Arrange the plots
+    grid.arrange(p4, p5, p6, ncol = 3)
+  }
 ```
 
 ### PDE 离散
