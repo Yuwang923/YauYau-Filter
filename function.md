@@ -291,7 +291,7 @@ plot_Obser(){
 \\ 
 
 \\ [[Rcpp::export]]
-??(){
+KolmogorovPDE_Discrete(){
 \\
 
 }
