@@ -99,7 +99,8 @@ $$
 $$
 </p>
 
-然后， $u(\tau_k, s) = \exp \left( - \sum_{j=1}^m y_j(\tau_{k-1}) h_j(x) \right) \tilde{u}_k(\tau_k, s)$，那么状态的估计可通过    计算得到。
+然后， $u(\tau_k, s) = \exp \left( - \sum_{j=1}^m y_j(\tau_{k-1}) h_j(x) \right) \tilde{u}_k(\tau_k, s)$，
+那么状态的估计可通过 $x(t) \approx \int_Omega sdu(t, s) \, ds$ 计算得到。
 
 在经典的非线性滤波问题（NFP）中：当观测到 $\mathbf{y}(\tau_k)$ 时，在 $t = \tau_k$ 更新 $u(\tau_k, s)$：
 
