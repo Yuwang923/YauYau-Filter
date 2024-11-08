@@ -79,7 +79,8 @@ $$
 - 
 #### 原理
 非线性滤波理论的核心问题是实时、无记忆地求解 DMZ 方程。
-Yau 和 Yau 证明，在一些温和条件下，DMZ 方程具有唯一的非负解 $u(\tau, s)$，可以通过 $\tilde{u}_k(\tau_k, s)$计算得到。 $\tilde{u}_k(\tau_k, s)|$ 
+Yau 和 Yau 证明，在一些温和条件下，DMZ 方程具有唯一的非负解 $u(\tau, s)$，可以通过 $\tilde{u}_k(\tau_k, s)$计算得到。 $\tilde{u}_k(\tau_k, s)|_$ 满足 Kolmogorov 方程：
+
 
 
 ## 基本操作
