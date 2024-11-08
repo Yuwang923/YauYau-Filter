@@ -63,7 +63,7 @@ $$
 - **$\mathbf{h}(\mathbf{x}) = (h_1(\mathbf{x}), \dots, h_M(\mathbf{x}))^\top \in \mathbb{R}^M$**：非线性观测项;
 - **$\mathbf{v}(t) \in \mathbb{R}^N, \; \mathbf{w}(t) \in \mathbb{R}^M$**：独立的布朗运动。
 - 
-设 $\rho(t, s)$ 表示在给定 $\mathbf{y}(\tau)$ 的条件下 $\mathbf{x}(t)$ 的条件概率密度。$\rho(t, s)$ 通过对满足 DMZ 方程的 $\sigma(t, s)$ 进行归一化得到：
+设 $\rho(t, s)$ 表示在给定 $\mathbf{y}(\tau)$ 的条件下 $\mathbf{x}(t)$ 的条件概率密度。 $\rho(t, s)$ 通过对满足 DMZ 方程的 $\sigma(t, s)$ 进行归一化得到：
 
 $$
 d\sigma(t, s) = L_0 \sigma(t, s) dt + \sum_{i=1}^n L_i \sigma(t, s) d y_i(t), \quad \sigma(0, s) = \sigma_0,
