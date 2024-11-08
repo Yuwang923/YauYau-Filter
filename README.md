@@ -99,6 +99,26 @@ $$
 $$
 </p>
 
+然后， $u(\tau_k, s) = \exp \left( - \sum_{j=1}^m y_j(\tau_{k-1}) h_j(x) \right) \tilde{u}_k(\tau_k, s)$，那么状态的估计可通过    计算得到。
+
+在经典的非线性滤波问题（NFP）中：当观测到 $\mathbf{y}(\tau_k)$ 时，在 $t = \tau_k$ 更新 $u(\tau_k, s)$：
+
+<p>
+$$
+u(\tau_k, s) = \exp \left\{ (\mathbf{y}(\tau_k) - \mathbf{y}(\tau_{k-1})) \cdot \mathbf{h}(s) \right\} u(\tau_{k-1}, s).
+$$
+</p>
+
+通过 Yau-Yau 方法，NFP 可以简化为 Kolmogorov 偏微分方程（PDE）：
+
+<p>
+$$
+\frac{\partial u}{\partial t} (t, s) = \frac{1}{2} \Delta u(t, s) - \mathbf{f}(s) \cdot \nabla u(t, s) - \left( \nabla \cdot \mathbf{f}(s) + \frac{1}{2} \|\mathbf{h}(s)\|^2 \right) u(t, s),
+$$
+</p>
+
+其中初始条件 $u(0, s) = \sigma_0(s)$ 是已知的概率密度函数（PDF），状态的估计通过 $x(t) \approx \int_\Omega s(t, s) \, ds$ 计算得到。
+
 ## 基本操作
 
 ## 模型参数调整
