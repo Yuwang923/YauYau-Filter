@@ -1,7 +1,7 @@
 ## 目录
 
 - [ 简介](#简介)：介绍滤波及其历史发展
-- [Yauyau filter主要功能](#Yauyau-filter主要功能)：Yauyau filter专注于复杂系统中的非线性滤波问题
+- [Yauyau filter主要功能](#Yauyau-filter主要功能)：Yauyau filter的应用及其发展前景
 - [底层原理](#底层原理)：技术背景和工作机制的详细解释
 - [基本操作](#基本操作)：
 - [模型参数调整](#模型参数调整)：
