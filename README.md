@@ -32,8 +32,6 @@
 ## Yauyau filter主要功能
 Yau-Yau filter是一种处理非线性滤波问题的数学方法，主要用于解决非线性动态系统中噪声数据的滤波问题，旨在实时、无记忆地求解Duncan–Mortensen–Zakai（DMZ）方程.该滤波器通过将滤波问题转化为Kolmogorov方程的求解，来实现对系统状态的实时估计.其应用场景广泛，包括军事雷达系统的目标跟踪、自动驾驶车辆的状态估计、以及金融数据的动态分析等场合，为实时信号处理和状态预测提供了精确的非线性滤波手段.
 ## 底层原理
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
 ### 非线性滤波问题 (Nonlinear Filtering Problems, NFP)
 
 - $\mathbf{x}(t)$：信号 / 状态；
@@ -42,22 +40,17 @@ Yau-Yau filter是一种处理非线性滤波问题的数学方法，主要用于
 #### 目标
 通过给定的观测历史 $\{ y(\tau) \mid \tau \in [0, t] \}$，估计状态 $\mathbf{x}(t)$：
 
-<div>
-\[
+$$
 \{ y(\tau) \mid \tau \in [0, t] \}, \quad t \in (0, T]
-\]
-</div>
-
+$$
 考虑信号-观测模型的经典非线性滤波问题（NFP）：
 
-<div>
-\[
+$$
 \begin{cases}
     d\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t)) dt + d\mathbf{v}(t), & \mathbf{x}(0) = \mathbf{x}_0, \\
     d\mathbf{y}(t) = \mathbf{h}(\mathbf{x}(t)) dt + d\mathbf{w}(t), & \mathbf{y}(0) = 0.
 \end{cases}
-\]
-</div>
+$$
 
 其中：
 
@@ -66,67 +59,20 @@ Yau-Yau filter是一种处理非线性滤波问题的数学方法，主要用于
 - **$\mathbf{f}(\mathbf{x}) = (f_1(\mathbf{x}), \dots, f_N(\mathbf{x}))^\top \in \mathbb{R}^N$**：非线性漂移项;
 - **$\mathbf{h}(\mathbf{x}) = (h_1(\mathbf{x}), \dots, h_M(\mathbf{x}))^\top \in \mathbb{R}^M$**：非线性观测项;
 - **$\mathbf{v}(t) \in \mathbb{R}^N, \; \mathbf{w}(t) \in \mathbb{R}^M$**：独立的布朗运动。
-
+- 
 设 $\rho(t, s)$ 表示在给定 $\mathbf{y}(\tau)$ 的条件下 $\mathbf{x}(t)$ 的条件概率密度。$\rho(t, s)$ 通过对满足 DMZ 方程的 $\sigma(t, s)$ 进行归一化得到：
 
-<div>
-\[
+$$
 d\sigma(t, s) = L_0 \sigma(t, s) dt + \sum_{i=1}^n L_i \sigma(t, s) d y_i(t), \quad \sigma(0, s) = \sigma_0,
-\]
-</div>
+$$
 
 其中，
 
-<div>
-\[
+$$
 L_0 = \frac{1}{2} \sum_{i=1}^n \frac{\partial^2}{\partial s_i^2} - \sum_{i=1}^n f_i \frac{\partial}{\partial s_i} - \sum_{i=1}^n \frac{\partial f_i}{\partial s_i} - \frac{1}{2} \sum_{i=1}^m h_i^2.
-\]
-</div>
+$$
 
 - **$\{ L_i \}_{i=1}^m$** 表示乘以 $h_i$ 的零阶微分算子。
-
-#### 原理
-非线性滤波理论的核心问题是实时、无记忆地求解 DMZ 方程。
-
-Yau 和 Yau 证明，在一些温和条件下，DMZ 方程具有唯一的非负解 $u(\tau, s)$，可以通过 $\tilde{u}_k(\tau_k, s)$ 计算得到。$\tilde{u}_k(t, s) \big|_{[ \tau_{k-1}, \tau_k ]}$ 满足 Kolmogorov 方程：
-
-<div>
-\[
-\frac{\partial \tilde{u}_k}{\partial t} (t, s) = \frac{1}{2} \Delta \tilde{u}_k - \mathbf{f}(s) \cdot \nabla \tilde{u}_k - \left( \nabla \cdot \mathbf{f} + \frac{1}{2} |\mathbf{h}|^2 \right) \tilde{u}_k, \quad t \in [\tau_{k-1}, \tau_k],
-\]
-</div>
-
-<div>
-\[
-\tilde{u}_k(\tau_{k-1}, s) = \exp \left\{ (\mathbf{y}(\tau_{k-1}) - \mathbf{y}(\tau_{k-2})) \cdot \mathbf{h}(x) \right\} \tilde{u}_{k-1}(\tau_{k-1}, s),
-\]
-</div>
-
-<div>
-\[
-\tilde{u}_1(0, s) = \sigma_0(s) \exp \{ \mathbf{y}(0) \cdot \mathbf{h}(x) \}, \quad k = 2, \dots, N_\tau.
-\]
-</div>
-
-然后，$u(\tau_k, s) = \exp \left( - \sum_{j=1}^m y_j(\tau_{k-1}) h_j(x) \right) \tilde{u}_k(\tau_k, s)$，那么状态的估计可通过 $x(t) \approx \int_\Omega s d u(t, s)$ 计算得到。
-
-在经典的非线性滤波问题（NFP）中：当观测到 $\mathbf{y}(\tau_k)$ 时，在 $t = \tau_k$ 更新 $u(\tau_k, s)$：
-
-<div>
-\[
-u(\tau_k, s) = \exp \left\{ (\mathbf{y}(\tau_k) - \mathbf{y}(\tau_{k-1})) \cdot \mathbf{h}(s) \right\} u(\tau_{k-1}, s).
-\]
-</div>
-
-通过 Yau-Yau 方法，NFP 可以简化为 Kolmogorov 偏微分方程（PDE）：
-
-<div>
-\[
-\frac{\partial u}{\partial t} (t, s) = \frac{1}{2} \Delta u(t, s) - \mathbf{f}(s) \cdot \nabla u(t, s) - \left( \nabla \cdot \mathbf{f}(s) + \frac{1}{2} \|\mathbf{h}(s)\|^2 \right) u(t, s),
-\]
-</div>
-
-其中初始条件 $u(0, s) = \sigma_0(s)$ 是已知的概率密度函数（PDF），状态的估计通过 $x(t) \approx \int_\Omega s(t, s) \, ds$ 计算得到。
 
 
 ## 基本操作
