@@ -79,47 +79,7 @@ $$
 - 
 #### 原理
 非线性滤波理论的核心问题是实时、无记忆地求解 DMZ 方程。
-
-Yau 和 Yau 证明，在一些温和条件下，DMZ 方程具有唯一的非负解 $u(\tau, s)$，可以通过 $\tilde{u}_k(\tau_k, s)$ 计算得到。$\tilde{u}_k(t, s) \big|_{[ \tau_{k-1}, \tau_k ]}$ 满足 Kolmogorov 方程：
-
-<p align="center">
-\[
-\frac{\partial \tilde{u}_k}{\partial t} (t, s) = \frac{1}{2} \Delta \tilde{u}_k - \mathbf{f}(s) \cdot \nabla \tilde{u}_k - \left( \nabla \cdot \mathbf{f} + \frac{1}{2} |\mathbf{h}|^2 \right) \tilde{u}_k, \quad t \in [\tau_{k-1}, \tau_k],
-\]
-</p>
-
-<p align="center">
-\[
-\tilde{u}_k(\tau_{k-1}, s) = \exp \left\{ (\mathbf{y}(\tau_{k-1}) - \mathbf{y}(\tau_{k-2})) \cdot \mathbf{h}(x) \right\} \tilde{u}_{k-1}(\tau_{k-1}, s),
-\]
-</p>
-
-<p align="center">
-\[
-\tilde{u}_1(0, s) = \sigma_0(s) \exp \{ \mathbf{y}(0) \cdot \mathbf{h}(x) \}, \quad k = 2, \dots, N_\tau.
-\]
-</p>
-
-然后，$u(\tau_k, s) = \exp \left( - \sum_{j=1}^m y_j(\tau_{k-1}) h_j(x) \right) \tilde{u}_k(\tau_k, s)$，那么状态的估计可通过 $x(t) \approx \int_\Omega s d u(t, s)$ 计算得到。
-
-在经典的非线性滤波问题（NFP）中：当观测到 $\mathbf{y}(\tau_k)$ 时，在 $t = \tau_k$ 更新 $u(\tau_k, s)$：
-
-<p align="center">
-\[
-u(\tau_k, s) = \exp \left\{ (\mathbf{y}(\tau_k) - \mathbf{y}(\tau_{k-1})) \cdot \mathbf{h}(s) \right\} u(\tau_{k-1}, s).
-\]
-</p>
-
-通过 Yau-Yau 方法，NFP 可以简化为 Kolmogorov 偏微分方程（PDE）：
-
-<p align="center">
-\[
-\frac{\partial u}{\partial t} (t, s) = \frac{1}{2} \Delta u(t, s) - \mathbf{f}(s) \cdot \nabla u(t, s) - \left( \nabla \cdot \mathbf{f}(s) + \frac{1}{2} \|\mathbf{h}(s)\|^2 \right) u(t, s),
-\]
-</p>
-
-其中初始条件 $u(0, s) = \sigma_0(s)$ 是已知的概率密度函数（PDF），状态的估计通过 $x(t) \approx \int_\Omega s(t, s) \, ds$ 计算得到。
-
+Yau 和 Yau 证明，在一些温和条件下，DMZ 方程具有唯一的非负解 $u(\tau, s)$，可以通过 $\tilde{u}_k(\tau_k, s)$ 计算得到。 $\tilde{u}_k(t, s) \big|_{[ \tau_{k-1}, \tau_k ]}$ 满足 Kolmogorov 方程：
 
 ## 基本操作
 
