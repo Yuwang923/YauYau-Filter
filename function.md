@@ -323,79 +323,95 @@ List Simulate_State_Obser(double Dt, int Ntau, int NtNtau, Function f, Function 
 ```
 
 ```R
-# 状态过程的图像
-plot_State <- function(x) {
+# 观测过程的图像
+plot_State <- function(x, output_file = NULL) {
     # Convert matrices to data frames for easier plotting
     x_df <- as.data.frame(x)
     
     # Add time column
-    x_df$time <- 1:nrow(x_df)
+    x_df$time <- seq(0, T, length.out = nrow(x_df))
     
     # Reshape data frames for plotting
     x_melt <- reshape2::melt(x_df, id.vars = "time", variable.name = "Dimension", value.name = "Value")
     
-    # Plot x for each dimension
-    p1 <- ggplot(subset(x_melt, Dimension == "V1"), aes(x = time, y = Value)) +
-      geom_line(color = "blue") +
-      labs(title = "x_1", x = "Time", y = "Value") +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
+    # Define a color palette that can accommodate more than 6 dimensions
+    colors <- colorRampPalette(c('blue', 'red', 'green', 'purple', 'orange', 'brown', 'pink', 'cyan'))(length(unique(x_melt$Dimension)))
+    plots <- list()
+    for (i in unique(x_melt$Dimension)) {
+      color <- colors[(as.numeric(gsub('V', '', i)) - 1) %% length(colors) + 1]
+      p <- ggplot(subset(x_melt, Dimension == i), aes(x = time, y = Value)) +
+        geom_line(color = color) +
+        labs(title = paste0("x_", i), x = "Time", y = "Value") +
+        theme_minimal() + theme(plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = 'black', fill = NA, linewidth = 1))
+      plots[[length(plots) + 1]] <- p
+    }
     
-    p2 <- ggplot(subset(x_melt, Dimension == "V2"), aes(x = time, y = Value)) +
-      geom_line(color = "red") +
-      labs(title = "x_2", x = "Time", y = "Value") +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
+    # Arrange the plots dynamically for better visualization
+    n <- length(plots)
+    if (n <= 3) {
+      ncol <- n
+      nrow <- 1
+    } else {
+      ncol <- ceiling(sqrt(n))
+      nrow <- ceiling(n / ncol)
+    }
+    grid_plot <- do.call(grid.arrange, c(plots, ncol = ncol, nrow = nrow))
     
-    p3 <- ggplot(subset(x_melt, Dimension == "V3"), aes(x = time, y = Value)) +
-      geom_line(color = "green") +
-      labs(title = "x_3", x = "Time", y = "Value") +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
-    
-    # Arrange the plots
-    grid.arrange(p1, p2, p3, ncol = 3)
+    # Save the plot if output_file is provided
+    if (!is.null(output_file)) {
+      ggsave(output_file, grid_plot, width = 12, height = ceiling(length(plots) / 3) * 4)
+    }
   }
 ```
-![state_plot](https://github.com/user-attachments/assets/7c8ff099-d4c2-4137-b894-7e0dd0276284)
+
+<img width="727" alt="image" src="https://github.com/user-attachments/assets/11425518-7eb8-46fb-8ff5-f2f4ea93ba3e">
+
 
 
 ```R
 # 观测过程的图像
-plot_Obser <- function(y_tau) {
+plot_Obser <- function(y_tau, output_file = NULL) {
     # Convert matrices to data frames for easier plotting
     y_tau_df <- as.data.frame(y_tau)
     
     # Add time column
-    y_tau_df$time <- seq(1, nrow(y_tau_df))
+    y_tau_df$time <- seq(0, T, length.out = nrow(y_tau_df))
     
     # Reshape data frames for plotting
     y_tau_melt <- reshape2::melt(y_tau_df, id.vars = "time", variable.name = "Dimension", value.name = "Value")
     
-    # Plot y_tau for each dimension
-    p4 <- ggplot(subset(y_tau_melt, Dimension == "V1"), aes(x = time, y = Value)) +
-      geom_line(color = "blue") +
-      labs(title = "y_1", x = "Time", y = "Value") +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
+    # Define a color palette that can accommodate more than 6 dimensions
+    colors <- colorRampPalette(c('blue', 'red', 'green', 'purple', 'orange', 'brown', 'pink', 'cyan'))(length(unique(y_tau_melt$Dimension)))
+    plots <- list()
+    for (i in unique(y_tau_melt$Dimension)) {
+      color <- colors[(as.numeric(gsub('V', '', i)) - 1) %% length(colors) + 1]
+      p <- ggplot(subset(y_tau_melt, Dimension == i), aes(x = time, y = Value)) +
+        geom_line(color = color) +
+        labs(title = paste0("y_", i), x = "Time", y = "Value") +
+        theme_minimal() + theme(plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = 'black', fill = NA, linewidth = 1))
+      plots[[length(plots) + 1]] <- p
+    }
     
-    p5 <- ggplot(subset(y_tau_melt, Dimension == "V2"), aes(x = time, y = Value)) +
-      geom_line(color = "red") +
-      labs(title = "y_2", x = "Time", y = "Value") +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
+    # Arrange the plots dynamically for better visualization
+    n <- length(plots)
+    if (n <= 3) {
+      ncol <- n
+      nrow <- 1
+    } else {
+      ncol <- ceiling(sqrt(n))
+      nrow <- ceiling(n / ncol)
+    }
+    grid_plot <- do.call(grid.arrange, c(plots, ncol = ncol, nrow = nrow))
     
-    p6 <- ggplot(subset(y_tau_melt, Dimension == "V3"), aes(x = time, y = Value)) +
-      geom_line(color = "green") +
-      labs(title = "y_3", x = "Time", y = "Value") +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
-    
-    # Arrange the plots
-    grid.arrange(p4, p5, p6, ncol = 3)
+    # Save the plot if output_file is provided
+    if (!is.null(output_file)) {
+      ggsave(output_file, grid_plot, width = 12, height = ceiling(length(plots) / 3) * 4)
+    }
   }
 ```
-![observation_plot](https://github.com/user-attachments/assets/f9b83e8b-6e25-4f30-a6b8-7aa8960f692b)
+
+<img width="728" alt="image" src="https://github.com/user-attachments/assets/bcd22ec1-2247-4e2a-825a-e4ba0fc9a8be">
+
 
 
 
